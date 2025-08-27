@@ -2,6 +2,7 @@ import { Card, Flex, Text, Button, Box, Badge } from '@radix-ui/themes';
 import { isOverdue, isTaskDone, StatusConfig, Task } from '@/types/Task';
 import { CalendarIcon, ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useMemo } from 'react';
+import styles from '@/styles/TaskCard.module.css';
 
 interface TaskCardProps {
   task: Task;
@@ -18,23 +19,15 @@ const formatDate = (date: Date) => {
 };
 
 export default function TaskCard({ task, onEdit, onDelete }: TaskCardProps) {
-  const status = StatusConfig[task.status];
-  const StatusIcon = status.icon;
   const isTaskOverdue = useMemo(() => isOverdue(task), [task.dueDate]);
 
   return (
-    <Card size="2">
+    <Card size="2" className={styles.taskCard}>
       <Flex direction="column" gap="3">
         <Flex justify="between" align="center">
           <Text as="div" size="3" weight="bold" trim="start">
             {task.title}
           </Text>
-          <Badge color={status.color as any}>
-            <Flex gap="1" align="center">
-              <StatusIcon />
-              <Text size="1">{status.label}</Text>
-            </Flex>
-          </Badge>
         </Flex>
 
         <Box>

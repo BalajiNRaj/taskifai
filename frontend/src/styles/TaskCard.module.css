@@ -1,0 +1,20 @@
+/* .taskCard {
+  background-color: var(--color-background);
+  cursor: pointer;
+}
+
+.taskCard:hover {
+    border: 2px solid var(--color-theme);
+} */
+
+
+.taskCard {
+  background-color: var(--color-panel);
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.taskCard:hover {
+  border: 1px solid var(--accent-8);
+  background-color: var(--accent-4);
+}

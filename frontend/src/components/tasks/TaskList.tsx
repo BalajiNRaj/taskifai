@@ -1,7 +1,7 @@
 'use client'
 import { Task, StatusConfig } from '@/types/Task';
 import React, { useEffect, useState } from 'react'
-import { Grid, Box, Flex, Text, Card } from '@radix-ui/themes';
+import { Grid, Box, Flex, Text, Card, Badge, Spinner } from '@radix-ui/themes';
 import TaskCard from './TaskCard';
 
 const mockTasks: Task[] = [
@@ -41,7 +41,7 @@ const TaskList = () => {
     useEffect(() => {
         const taskGroup: Record<string, Task[]> = {};
         mockTasks.forEach(task => {
-            if(!taskGroup[task.status]) taskGroup[task.status] = [];
+            if (!taskGroup[task.status]) taskGroup[task.status] = [];
             taskGroup[task.status].push(task);
         })
 
@@ -49,11 +49,11 @@ const TaskList = () => {
         setLoading(false);
     }, [mockTasks]);
 
-    if(loading) {
-        return (<>Loading</>)
+    if (loading) {
+        return (<Spinner />)
     }
 
-    if(Object.keys(groupedTasks).length === 0) {
+    if (Object.keys(groupedTasks).length === 0) {
         return (<>No Tasks Found</>)
     }
 
@@ -67,40 +67,56 @@ const TaskList = () => {
         const updatedTasks = mockTasks.filter(task => task.id !== taskId);
         const taskGroup: Record<string, Task[]> = {};
         updatedTasks.forEach(task => {
-            if(!taskGroup[task.status]) taskGroup[task.status] = [];
+            if (!taskGroup[task.status]) taskGroup[task.status] = [];
             taskGroup[task.status].push(task);
         });
         setGroupedTasks(taskGroup);
     };
 
     return (
-        <Grid columns="3" gap="3" width="auto">
-            {Object.entries(StatusConfig).map(([status, config]) => (
-                <Box key={status}>
-                    <Card size="2" style={{ height: '100%' }}>
-                        <Flex direction="column" gap="3">
-                            <Flex justify="between" align="center" py="2">
-                                <Text size="2" weight="bold">
-                                    {config.label}
-                                </Text>
-                                <Text size="2" color="gray">
-                                    {groupedTasks[status]?.length || 0}
-                                </Text>
+        <Grid columns="3" gap="6" >
+            {Object.entries(StatusConfig).map(([status, config]) => {
+
+                return (
+                    <Box key={status}>
+                        <Card size="2" style={{
+                            height: '100%',
+                            background: 'var(--gray-a2)',
+                            boxShadow: 'none'
+                        }}>
+                            <Flex direction="column" gap="3">
+                                <Flex justify="between" align="center" py="2">
+                                    <Flex gap="2" align="center">
+                                        {/* <StatusIcon /> */}
+                                        <Text size="2" weight="bold" color={config.color as any}>
+                                            {config.label}
+                                        </Text>
+                                    </Flex>
+                                    <Badge size="1" variant="soft" color={config.color as any} >
+                                        {groupedTasks[status]?.length || 0}
+                                    </Badge>
+                                </Flex>
+                                <Flex
+                                    direction="column"
+                                    gap="2"
+                                    style={{
+                                        minHeight: '70vh',
+                                    }}
+                                >
+                                    {groupedTasks[status]?.map(task => (
+                                        <TaskCard
+                                            key={task.id}
+                                            task={task}
+                                            onEdit={handleEditTask}
+                                            onDelete={handleDeleteTask}
+                                        />
+                                    ))}
+                                </Flex>
                             </Flex>
-                            <Flex direction="column" gap="2">
-                                {groupedTasks[status]?.map(task => (
-                                    <TaskCard
-                                        key={task.id}
-                                        task={task}
-                                        onEdit={handleEditTask}
-                                        onDelete={handleDeleteTask}
-                                    />
-                                ))}
-                            </Flex>
-                        </Flex>
-                    </Card>
-                </Box>
-            ))}
+                        </Card>
+                    </Box>
+                )
+            })}
         </Grid>
     );
 }
