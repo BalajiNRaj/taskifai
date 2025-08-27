@@ -1,3 +1,33 @@
+.title {
+  font-weight: 800;
+  background: linear-gradient(180deg, #ffffff 0%, #f0f0f0 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.highlight {
+  background: linear-gradient(
+    300deg,
+    #4c6ef5 0%,    /* Blue */
+    #9775fa 25%,   /* Purple */
+    #da77f2 50%,   /* Pink */
+    #748ffc 75%,   /* Light Blue */
+    #4c6ef5 100%   /* Blue */
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shine 5s linear infinite;
+  display: inline-block;
+}
+
+@keyframes shine {
+  to {
+    background-position: 200% center;
+  }
+}
+
 .page {
   --gray-rgb: 0, 0, 0;
   --gray-alpha-200: rgba(var(--gray-rgb), 0.08);
